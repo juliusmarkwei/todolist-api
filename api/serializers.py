@@ -4,9 +4,7 @@ from core.settings import DATE_INPUT_FORMAT
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    due_date = serializers.DateTimeField(
-        input_formats=DATE_INPUT_FORMAT, required=False
-    )
+    due_date = serializers.DateTimeField(required=False)
     countdown = serializers.DurationField(read_only=True)
 
     class Meta:
@@ -18,7 +16,6 @@ class TaskSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "due_date",
-            "target_date",
             "countdown",
             "status",
         ]
