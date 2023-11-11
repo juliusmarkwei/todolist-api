@@ -16,12 +16,13 @@ class UserProfile(models.Model):
     joined_date = models.DateField(default=timezone.now)
 
     def save(self, *args, **kwargs):
-        # Set the email field to the associated user's email when saving
-        self.email = self.user.email
-        super().save(*args, **kwargs)
+        if not self.email:
+            self.email = self.user.email
+        super(UserProfile, self).save(*args, **kwargs)
+        print(self.email)
 
     def __str__(self):
-        return self.user.username
+        return self.user
 
 
 class Task(models.Model):
@@ -42,24 +43,35 @@ class Task(models.Model):
     title = models.CharField(max_length=250)
     description = models.TextField(max_length=500)
     due_date = models.DateTimeField(null=True, blank=True)
-    countdown = models.DurationField(null=True, blank=True)
+    countdown = models.CharField(max_length=50, blank=True, null=True)
     completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(null=False, default=timezone.now)
-    updated_at = models.DateTimeField(
+    last_update = models.DateTimeField(
         auto_now_add=False, auto_now=False, blank=True, null=True
     )
     status = models.CharField(max_length=10, choices=options, default="draft")
+    taskobjects = TaskObject()
+    objects = models.Manager()
+
+    def calculate_countdown(self):
+        now = timezone.now()
+
+        due_date_utc = self.due_date.astimezone(timezone.utc)
+        now_utc = now.astimezone(timezone.utc)
+
+        time_difference = due_date_utc - now_utc
+
+        print(f'The time difference : {time_difference}')
+        print(f'The due date from the db : {due_date_utc}')
+        print(f'Now date is : {now_utc}')
+        days, seconds = divmod(time_difference.seconds, 86400)
+        hours, _ = divmod(seconds, 3600)
+        countdown_str = f"{days} days, {hours} hours"
+
+        self.countdown = countdown_str
 
     def save(self, *args, **kwargs):
-        # Check if due_date is set and is a valid datetime object
-        if self.due_date and isinstance(self.due_date, timezone.datetime):
-            now = timezone.now()
-            time_difference = self.due_date - now
-            self.countdown = time_difference
-        else:
-            print("Date mighthave an error")
-            self.countdown = None
-
+        self.calculate_countdown()
         super().save(*args, **kwargs)
 
     class Meta:
