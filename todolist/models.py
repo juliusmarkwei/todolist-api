@@ -42,7 +42,6 @@ class Task(models.Model):
     title = models.CharField(max_length=250)
     description = models.TextField(max_length=500)
     due_date = models.DateTimeField(null=True, blank=True)
-    target_date = models.DateTimeField(null=True, blank=True)
     countdown = models.DurationField(null=True, blank=True)
     completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(null=False, default=timezone.now)
