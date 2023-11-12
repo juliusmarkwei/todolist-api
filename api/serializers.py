@@ -16,7 +16,7 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
 
 
-# class UserProfileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserProfile
-#         fields = ["username", "email", "joined_date"]
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ["username", "email", "joined_date"]
