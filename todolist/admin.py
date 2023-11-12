@@ -4,8 +4,8 @@ from .models import UserProfile
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'email', 'joined_date']
-    search_fields = ['user__username', 'email']
+    list_display = ['username', 'email', 'joined_date']
+    search_fields = ['username', 'email']
     
     
 models_to_ignore = []
