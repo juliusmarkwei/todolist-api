@@ -11,18 +11,18 @@ class Category(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    username = models.OneToOneField(User, on_delete=models.CASCADE)
     email = models.EmailField(default=None, blank=True)
     joined_date = models.DateField(default=timezone.now)
 
     def save(self, *args, **kwargs):
         if not self.email:
-            self.email = self.user.email
+            self.email = self.username.email
         super(UserProfile, self).save(*args, **kwargs)
         print(self.email)
 
     def __str__(self):
-        return self.user
+        return self.username
 
 
 class Task(models.Model):
@@ -61,9 +61,9 @@ class Task(models.Model):
 
         time_difference = due_date_utc - now_utc
 
-        print(f'The time difference : {time_difference}')
-        print(f'The due date from the db : {due_date_utc}')
-        print(f'Now date is : {now_utc}')
+        print(f"The time difference : {time_difference}")
+        print(f"The due date from the db : {due_date_utc}")
+        print(f"Now date is : {now_utc}")
         days, seconds = divmod(time_difference.seconds, 86400)
         hours, _ = divmod(seconds, 3600)
         countdown_str = f"{days} days, {hours} hours"
