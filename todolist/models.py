@@ -10,19 +10,13 @@ class Category(models.Model):
         return self.name
 
 
-class UserProfile(models.Model):
-    username = models.OneToOneField(User, on_delete=models.CASCADE)
+class EndUsers(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     email = models.EmailField(default=None, blank=True)
     joined_date = models.DateField(default=timezone.now)
 
-    def save(self, *args, **kwargs):
-        if not self.email:
-            self.email = self.username.email
-        super(UserProfile, self).save(*args, **kwargs)
-        print(self.email)
-
     def __str__(self):
-        return self.username
+        return self.user.username
 
 
 class Task(models.Model):
