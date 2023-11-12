@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from todolist.models import Task, UserProfile
+from todolist.models import Task, EndUsers
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class EndUsersSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
-        fields = ["username", "email", "joined_date"]
+        model = EndUsers
+        fields = ["user", "email", "joined_date"]

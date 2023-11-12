@@ -1,5 +1,5 @@
 from rest_framework import generics
-from todolist.models import Task, UserProfile
+from todolist.models import Task, EndUsers
 from .serializers import TaskSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 
