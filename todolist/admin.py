@@ -1,13 +1,14 @@
 from django.contrib import admin
 from django.apps import apps
-from .models import UserProfile
+from .models import EndUsers
 
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['username', 'email', 'joined_date']
-    search_fields = ['username', 'email']
-    
-    
+
+@admin.register(EndUsers)
+class EndUsersAdmin(admin.ModelAdmin):
+    list_display = ["user", "email", "joined_date"]
+    search_fields = ["user", "email"]
+
+
 models_to_ignore = []
 
 for model in apps.get_models():
