@@ -11,9 +11,15 @@ class Category(models.Model):
 
 
 class EndUsers(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
     email = models.EmailField(default=None, blank=True)
-    joined_date = models.DateField(default=timezone.now)
+    joined_date = models.DateTimeField(default=timezone.now)
+
+    def save(self, *args, **kwargs):
+        if not self.email:
+            self.email = self.user.email
+
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username
@@ -66,6 +72,7 @@ class Task(models.Model):
 
     def save(self, *args, **kwargs):
         self.calculate_countdown()
+
         super().save(*args, **kwargs)
 
     class Meta:
