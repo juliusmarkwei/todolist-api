@@ -3,6 +3,8 @@ from todolist.models import Task, EndUsers
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    due_date = serializers.DateTimeField(format="%d-%m-%Y %I:%M %p")
+
     class Meta:
         model = Task
         fields = [
