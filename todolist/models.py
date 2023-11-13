@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import datetime
+import re
 
 
 class Category(models.Model):
@@ -9,9 +11,15 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
 
 class EndUsers(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, unique=True, related_name="endusers"
+    )
     email = models.EmailField(default=None, blank=True)
     joined_date = models.DateTimeField(default=timezone.now)
 
@@ -23,6 +31,10 @@ class EndUsers(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    class Meta:
+        verbose_name = "End Users"
+        verbose_name_plural = "End Users"
 
 
 class Task(models.Model):
@@ -54,21 +66,27 @@ class Task(models.Model):
     objects = models.Manager()
 
     def calculate_countdown(self):
-        now = timezone.now()
+        now = timezone.now().strftime("%d-%m-%Y %I:%M %p")
+        now_datetime = datetime.strptime(now, "%d-%m-%Y %I:%M %p")
+        str_formatted_due_date = self.due_date.strftime("%d-%m-%Y %I:%M %p")
+        formatted_due_date = datetime.strptime(
+            str_formatted_due_date, "%d-%m-%Y %I:%M %p"
+        )
 
-        due_date_utc = self.due_date.astimezone(timezone.utc)
-        now_utc = now.astimezone(timezone.utc)
+        time_difference = formatted_due_date - now_datetime
+        print(str(time_difference), f"and the type is {type(time_difference)}")
 
-        time_difference = due_date_utc - now_utc
+        match = re.match(r'(?:(\d+) day(?:s)?, )?(\d+):(\d+):(\d+)', str(time_difference))
+        if match:
+            days = int(match.group(1) or 0)  # If days are not present, default to 0
+            hours = int(match.group(2))
+            minutes = int(match.group(3))
+            seconds = int(match.group(4))
+        print('Countdown matched')
 
-        print(f"The time difference : {time_difference}")
-        print(f"The due date from the db : {due_date_utc}")
-        print(f"Now date is : {now_utc}")
-        days, seconds = divmod(time_difference.seconds, 86400)
-        hours, _ = divmod(seconds, 3600)
-        countdown_str = f"{days} days, {hours} hours"
-
-        self.countdown = countdown_str
+        self.countdown = (
+            f"{days} day(s), {hours} hour(s),  {minutes} minute(s), {seconds} seconds"
+        )
 
     def save(self, *args, **kwargs):
         self.calculate_countdown()
