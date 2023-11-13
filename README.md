@@ -2,7 +2,7 @@
 
 ### Description
 
-Building a TodoList API involves defining a database models and fields to represent tasks, users, and other relevant entities such as categories. This API is developed using Django Rest Framework. Protocols such as databse modelling, routing, HTTP references codes, user management, serialization and signals are implemented in this project.
+Building a TodoList API involves defining a database models and fields to represent tasks, users, and other relevant entities such as categories. This API is developed using Django Rest Framework. Protocols such as databse modelling, routing, HTTP status references codes, user management, serialization and signals are implemented in this project.
 
 ### Installation
 
