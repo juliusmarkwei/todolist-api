@@ -54,3 +54,4 @@ In this project, JWT, routers and viewset, and many other REST API functionaliti
 ### License
 
 This project is licensed under the MIT License - see the <a href="https://github.com/juliusmarkwei/todolist-api/blob/main/LICENSE.md">LICENSE</a> file for details.
+
